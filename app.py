@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from services.stock_data import get_stock_data
 from services.preprocessing import preprocess_stock_data, create_features_targets
@@ -71,6 +71,9 @@ def predict_stock_chart():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/static/<path:filename>")
+def serve_static(filename):
+    return send_from_directory("static", filename)
 
 if __name__ == "__main__":
     app.run(debug=True)
