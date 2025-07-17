@@ -3,7 +3,7 @@ from flask_cors import CORS
 from services.stock_data import get_stock_data
 from services.preprocessing import preprocess_stock_data, create_features_targets
 from services.model import train_and_evaluate
-from services.plot import plot_predictions
+
 import os
 
 app = Flask(__name__)
