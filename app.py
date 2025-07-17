@@ -43,37 +43,6 @@ def predict_stock_price():
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
-@app.route("/api/predict/chart", methods=["GET"])
-def predict_stock_chart():
-    ticker = request.args.get("ticker", "AAPL")
-    period = request.args.get("period", "6mo")
-
-    try:
-        raw_data = get_stock_data(ticker, period)
-        processed = preprocess_stock_data(raw_data)
-        X, y = create_features_targets(processed)
-        result = train_and_evaluate(X, y)
-
-        # ✅ FIX: Plot full y_test vs. predictions
-        chart_path = plot_predictions(
-            y_test=result["y_test"],
-            predictions=result["predictions"],
-            ticker=ticker
-        )
-
-        chart_url = f"/static/{os.path.basename(chart_path)}"
-        return jsonify({
-            "mse": round(result["mse"], 4),
-            "chart_url": chart_url
-        })
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-@app.route("/static/<path:filename>")
-def serve_static(filename):
-    return send_from_directory("static", filename)
 
 if __name__ == "__main__":
     app.run(debug=True)
